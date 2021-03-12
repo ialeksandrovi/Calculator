@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:weightSum="7"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+        android:id="@+id/tvMonitor"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:singleLine="true"
+        android:layout_weight="2"
+        android:background="@drawable/bordered_button"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
+
+</LinearLayout>
