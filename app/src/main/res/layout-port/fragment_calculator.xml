@@ -11,19 +11,17 @@
         android:id="@+id/tvMonitor"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_weight="2"
         android:background="@drawable/bordered_button"
         android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@+id/rvList"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="5dp" />
+        android:focusedByDefault="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="268dp" />
+        app:layout_constraintTop_toBottomOf="@id/tvMonitor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

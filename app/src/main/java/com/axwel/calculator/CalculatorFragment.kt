@@ -3,7 +3,10 @@ package com.axwel.calculator
 
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,34 +14,66 @@ import com.axwel.calculator.databinding.FragmentCalculatorBinding
 import com.axwel.calculator.presenter.CalculatorPresenter
 
 class CalculatorFragment: Fragment() {
-    private val keyboardAdapter = KeyboardButtonsAdapter(context)
+    lateinit var keyboardAdapter: KeyboardButtonsAdapter
     private val presenter = CalculatorPresenter()
     private var viewBinding: FragmentCalculatorBinding? = null
     private var recyclerView: RecyclerView? = null
+    private var monitor: TextView? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewBinding = FragmentCalculatorBinding.inflate(inflater, container, false)
+
+        return viewBinding!!.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding = FragmentCalculatorBinding.bind(view)
+        keyboardAdapter = KeyboardButtonsAdapter(context)
         viewBinding?.let {
             recyclerView = it.rvList
+            monitor = it.tvMonitor
+
         }
         recyclerView?.apply {
             layoutManager = GridLayoutManager(context, 4)
             adapter = keyboardAdapter
         }
+        monitor!!.text = "sdfsdg"
         keyboardAdapter.setFields(generatePseudoButtons())
     }
 
-    private fun generatePseudoButtons(): MutableList<DefaultCustomButton> {
-        val list = mutableListOf<DefaultCustomButton>()
-        list.add(DefaultCustomButton("1", R.color.purple_700, presenter.action()))
-        list.add(DefaultCustomButton("2", R.color.purple_500, presenter.action()))
-        list.add(DefaultCustomButton("4", R.color.purple_200, presenter.action()))
-        list.add(DefaultCustomButton("3", R.color.purple_700, presenter.action()))
-        list.add(DefaultCustomButton("5", R.color.purple_500, presenter.action()))
-        list.add(DefaultCustomButton("6", R.color.purple_200, presenter.action()))
-        list.add(DefaultCustomButton("7", R.color.purple_700, presenter.action()))
-        return list
+    override fun onDestroy() {
+        super.onDestroy()
+        viewBinding = null
+    }
+
+    private fun generatePseudoButtons(): MutableList<KeyboardButton> {
+        return mutableListOf<KeyboardButton>().apply {
+            add(OperationCustomButton("M+", Operation.MEMO_ADD))
+            add(OperationCustomButton("MR", Operation.MEMO_GET))
+            add(OperationCustomButton("MC", Operation.MEMO_CLEAR))
+            add(OperationCustomButton("C", Operation.DATA_CLEAR))
+
+            add(DefaultCustomButton("1", Operation.DATA_ADD))
+            add(DefaultCustomButton("2", Operation.DATA_ADD))
+            add(DefaultCustomButton("3", Operation.DATA_ADD))
+            add(OperationCustomButton("+", Operation.ADDITION))
+
+            add(DefaultCustomButton("4", Operation.DATA_ADD))
+            add(DefaultCustomButton("5", Operation.DATA_ADD))
+            add(DefaultCustomButton("6", Operation.DATA_ADD))
+            add(OperationCustomButton("-", Operation.SUBTRACTION))
+
+            add(DefaultCustomButton("7", Operation.DATA_ADD))
+            add(DefaultCustomButton("8", Operation.DATA_ADD))
+            add(DefaultCustomButton("9", Operation.DATA_ADD))
+            add(OperationCustomButton("x", Operation.MULTIPLICATION))
+
+            add(DefaultCustomButton(".", Operation.POINT))
+            add(DefaultCustomButton("0", Operation.DATA_ADD))
+            add(OperationCustomButton("=", Operation.EQUALITY))
+            add(OperationCustomButton("x", Operation.DIVISION))
+        }
     }
 
 
