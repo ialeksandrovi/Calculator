@@ -7,19 +7,26 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.axwel.calculator.databinding.FragmentCalculatorBinding
 import com.axwel.calculator.presenter.CalculatorPresenter
 
 class CalculatorFragment: Fragment() {
-    private val adapter = KeyboardButtonsAdapter(context)
+    private val keyboardAdapter = KeyboardButtonsAdapter(context)
     private val presenter = CalculatorPresenter()
+    private var viewBinding: FragmentCalculatorBinding? = null
+    private var recyclerView: RecyclerView? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rvList)
-        recyclerView.layoutManager = GridLayoutManager(context, 4)
-
-        recyclerView.adapter = adapter
-        adapter.setFields(generatePseudoButtons())
+        viewBinding = FragmentCalculatorBinding.bind(view)
+        viewBinding?.let {
+            recyclerView = it.rvList
+        }
+        recyclerView?.apply {
+            layoutManager = GridLayoutManager(context, 4)
+            adapter = keyboardAdapter
+        }
+        keyboardAdapter.setFields(generatePseudoButtons())
     }
 
     private fun generatePseudoButtons(): MutableList<DefaultCustomButton> {
@@ -36,8 +43,7 @@ class CalculatorFragment: Fragment() {
 
 
     companion object {
-        fun newInstance(): CalculatorFragment {
-            return CalculatorFragment()
-        }
+        val TAG = CalculatorFragment.javaClass.canonicalName
+        fun newInstance() = CalculatorFragment()
     }
 }

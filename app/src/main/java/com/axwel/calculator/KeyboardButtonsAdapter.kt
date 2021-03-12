@@ -6,21 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.axwel.calculator.databinding.DefaultCustomButtonBinding
 
-class KeyboardButtonsAdapter(private val context: Context?): RecyclerView.Adapter<ViewHolder>() {
-    private var mFields: MutableList<DefaultCustomButton> = mutableListOf()
+class KeyboardButtonsAdapter(private val context: Context?): RecyclerView.Adapter<KeyBoardViewHolder>() {
+    private var fields: MutableList<DefaultCustomButton> = mutableListOf()
 
     fun setFields(fields: MutableList<DefaultCustomButton>) {
-        mFields = fields
+        this.fields = fields
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(context).inflate(R.layout.default_custom_button, parent, false)
-        return ViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeyBoardViewHolder {
+        val itemButtonBinding = DefaultCustomButtonBinding.inflate(LayoutInflater.from(context), parent, false)
+        return KeyBoardViewHolder(itemButtonBinding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mFields[position]
+    override fun onBindViewHolder(holder: KeyBoardViewHolder, position: Int) {
+        val item = fields[position]
         holder.title.text = item.getTitle()
         holder.title.setTextColor(item.getColorId())
         holder.title.setOnClickListener {
@@ -29,10 +30,10 @@ class KeyboardButtonsAdapter(private val context: Context?): RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int {
-        return mFields.size
+        return fields.size
     }
 }
 
-class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class KeyBoardViewHolder(itemButtonBinding: DefaultCustomButtonBinding) : RecyclerView.ViewHolder(itemButtonBinding.root) {
     var title: TextView = itemView.findViewById<View>(R.id.text) as TextView
 }
