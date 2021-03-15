@@ -4,17 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
+    android:padding="@dimen/monitor_inside_padding"
     tools:ignore="MissingDefaultResource">
 
     <TextView
         android:id="@+id/tvMonitor"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/monitor_height"
         android:background="@drawable/bordered_button"
-        android:singleLine="true"
-        tools:ignore="MissingConstraints"
-        android:focusedByDefault="true"/>
+        android:textSize="@dimen/monitor_text_size"
+        android:padding="@dimen/monitor_inside_padding"
+        tools:ignore="MissingConstraints,RtlCompat"
+        android:textAlignment="viewEnd"
+        android:gravity="center_vertical"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvList"
