@@ -15,7 +15,7 @@ import com.axwel.calculator.presenter.CalculatorPresenter
 
 class CalculatorFragment: Fragment() {
     lateinit var keyboardAdapter: KeyboardButtonsAdapter
-    private val presenter = CalculatorPresenter()
+    private val presenter = context?.let { CalculatorPresenter(it) }
     private var viewBinding: FragmentCalculatorBinding? = null
     private var recyclerView: RecyclerView? = null
     private var monitor: TextView? = null
@@ -28,7 +28,29 @@ class CalculatorFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        keyboardAdapter = KeyboardButtonsAdapter(context)
+        keyboardAdapter = KeyboardButtonsAdapter(context, object : OperationListener {
+            override fun keyPicked(model: KeyBoardButtonModel) {
+                if (model.keyboardButton is OperationCustomButton) {
+                    when (model.keyboardButton.operation) {
+                        Operation.DIVISION -> presenter?.division()
+                        Operation.EQUALITY -> presenter?.getTotal()
+                        Operation.SUBTRACTION -> presenter?.subtraction()
+                        Operation.MULTIPLICATION -> presenter?.multiplication()
+                        Operation.DATA_CLEAR -> presenter?.clear()
+                        Operation.MEMO_CLEAR -> presenter?.clearMemory()
+                        Operation.MEMO_GET -> presenter?.getFromMemory()
+                        Operation.MEMO_ADD -> presenter?.saveInMemory()
+                        Operation.ADDITION -> presenter?.addition()
+                    }
+                } else {
+                    if (model.keyboardButton.operation == Operation.POINT) {
+                        presenter?.addPoint()
+                    } else {
+                        presenter?.addNumber(model.keyboardButton.name.toInt())
+                    }
+                }
+            }
+        })
         viewBinding?.let {
             recyclerView = it.rvList
             monitor = it.tvMonitor
