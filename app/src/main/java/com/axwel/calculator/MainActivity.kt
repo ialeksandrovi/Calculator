@@ -11,7 +11,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportFragmentManager.beginTransaction().replace(R.id.flContainer, CalculatorFragment.newInstance(), CalculatorFragment.TAG)
-            .commitNow()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.flContainer, CalculatorFragment.newInstance(), CalculatorFragment.TAG)
+            .commit()
     }
 }

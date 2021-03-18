@@ -2,6 +2,10 @@ package com.axwel.calculator.presenter
 
 import android.content.Context
 
+const val PLUS = "+"
+const val MINUS = "-"
+const val MULTIPLICATION = "*"
+const val DIVISION = "/"
 
 class CalculatorPresenter(
         private val context: Context,
@@ -99,8 +103,8 @@ class CalculatorPresenter(
       validate()
       firstOperator = monitorText.substring(0, monitorText.indexOf(" ")).toDouble()
       val index = monitorText.indexOf(" ")
-      operation = monitorText.substring(index+1, index+2)
-      secondOperator = monitorText.substring(index+2).toDouble()
+      operation = monitorText.substring(index + 1, index + 2)
+      secondOperator = monitorText.substring(index + 2).toDouble()
       processGetTotal()
       monitorText = total.toString()
       listener.monitorStateChanged(monitorText)
@@ -109,10 +113,10 @@ class CalculatorPresenter(
 
    private fun processGetTotal() {
       total = when (operation) {
-         "+" -> firstOperator.plus(secondOperator)
-         "-" -> firstOperator.minus(secondOperator)
-         "*" -> firstOperator.times(secondOperator)
-         "/" -> {
+         PLUS -> firstOperator.plus(secondOperator)
+         MINUS -> firstOperator.minus(secondOperator)
+         MULTIPLICATION -> firstOperator.times(secondOperator)
+         DIVISION -> {
              if (secondOperator == 0.0) {
                 0.0
              } else {

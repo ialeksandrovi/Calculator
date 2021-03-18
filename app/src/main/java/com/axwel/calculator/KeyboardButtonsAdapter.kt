@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.axwel.calculator.databinding.DefaultCustomButtonBinding
 
 class KeyboardButtonsAdapter(
-        private val context: Context?,
+        private val context: Context,
         val listener: OperationListener
         ): RecyclerView.Adapter<KeyBoardViewHolder>() {
     private var fields: MutableList<KeyboardButton> = mutableListOf()
@@ -27,10 +27,12 @@ class KeyboardButtonsAdapter(
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: KeyBoardViewHolder, position: Int) {
         val item = fields[position]
-        holder.btn.text = item.name
-        holder.btn.background = context?.resources?.getDrawable(item.getStyle())
-        holder.btn.setOnClickListener {
-            listener.keyPicked(KeyBoardButtonModel(item))
+        with(holder.btn) {
+            text = item.name
+            background = context.resources?.getDrawable(item.getStyle())
+            setOnClickListener {
+                listener.keyPicked(KeyBoardButtonModel(item))
+            }
         }
     }
 
