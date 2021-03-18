@@ -2,7 +2,9 @@ package com.axwel.calculator
 
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.LayoutDirection
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +14,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.axwel.calculator.databinding.FragmentCalculatorBinding
 import com.axwel.calculator.presenter.CalculatorPresenter
+import com.axwel.calculator.presenter.PresenterListener
 
 class CalculatorFragment: Fragment() {
     lateinit var keyboardAdapter: KeyboardButtonsAdapter
-    private val presenter = CalculatorPresenter()
+    lateinit var presenter: CalculatorPresenter
     private var viewBinding: FragmentCalculatorBinding? = null
     private var recyclerView: RecyclerView? = null
     private var monitor: TextView? = null
@@ -26,9 +29,39 @@ class CalculatorFragment: Fragment() {
         return viewBinding!!.root
     }
 
+    @SuppressLint("WrongConstant")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewBinding?.tvMonitor?.onRtlPropertiesChanged(LayoutDirection.RTL)
         super.onViewCreated(view, savedInstanceState)
-        keyboardAdapter = KeyboardButtonsAdapter(context)
+        presenter = context?.let { CalculatorPresenter(it, object : PresenterListener {
+            override fun monitorStateChanged(textMonitor: String) {
+                viewBinding?.tvMonitor?.text = textMonitor
+            }
+
+        }) }!!
+        keyboardAdapter = KeyboardButtonsAdapter(context, object : OperationListener {
+            override fun keyPicked(model: KeyBoardButtonModel) {
+                if (model.keyboardButton is OperationCustomButton) {
+                    when (model.keyboardButton.operation) {
+                        Operation.DIVISION -> presenter.division()
+                        Operation.EQUALITY -> presenter.getTotal()
+                        Operation.SUBTRACTION -> presenter.subtraction()
+                        Operation.MULTIPLICATION -> presenter.multiplication()
+                        Operation.DATA_CLEAR -> presenter.clear()
+                        Operation.MEMO_CLEAR -> presenter.clearMemory()
+                        Operation.MEMO_GET -> presenter.getFromMemory()
+                        Operation.MEMO_ADD -> presenter.saveInMemory()
+                        Operation.ADDITION -> presenter.addition()
+                    }
+                } else {
+                    if (model.keyboardButton.operation == Operation.POINT) {
+                        presenter.addPoint()
+                    } else {
+                        presenter.addNumber(model.keyboardButton.name.toInt())
+                    }
+                }
+            }
+        })
         viewBinding?.let {
             recyclerView = it.rvList
             monitor = it.tvMonitor
@@ -38,7 +71,7 @@ class CalculatorFragment: Fragment() {
             layoutManager = GridLayoutManager(context, 4)
             adapter = keyboardAdapter
         }
-        monitor!!.text = "sdfsdg"
+
         keyboardAdapter.setFields(generatePseudoButtons())
     }
 
@@ -67,12 +100,12 @@ class CalculatorFragment: Fragment() {
             add(DefaultCustomButton("7", Operation.DATA_ADD))
             add(DefaultCustomButton("8", Operation.DATA_ADD))
             add(DefaultCustomButton("9", Operation.DATA_ADD))
-            add(OperationCustomButton("x", Operation.MULTIPLICATION))
+            add(OperationCustomButton("*", Operation.MULTIPLICATION))
 
             add(DefaultCustomButton(".", Operation.POINT))
             add(DefaultCustomButton("0", Operation.DATA_ADD))
             add(OperationCustomButton("=", Operation.EQUALITY))
-            add(OperationCustomButton("x", Operation.DIVISION))
+            add(OperationCustomButton("/", Operation.DIVISION))
         }
     }
 
