@@ -1,23 +1,14 @@
 package com.axwel.calculator
 
-import android.content.Context
-import androidx.appcompat.widget.AppCompatButton
+import android.annotation.SuppressLint
+import android.content.res.Resources
+import android.graphics.drawable.Drawable
+
 
 class DefaultCustomButton(
-        val titleButton: String,
-        val colorIdButton: Int,
-        val actionButton: Unit
-): CalculatorButton {
-        override fun getTitle(): String {
-                return titleButton
+        override val name: String,
+        override val operation: Operation): KeyboardButton {
+        override fun getStyle(): Int {
+                return R.drawable.bordered_button
         }
-
-        override fun getColorId(): Int {
-                return colorIdButton
-        }
-
-        override fun getAction() {
-                return actionButton
-        }
-
 }

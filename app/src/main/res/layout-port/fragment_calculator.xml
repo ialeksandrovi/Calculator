@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
-    android:weightSum="7"
     tools:ignore="MissingDefaultResource">
 
     <TextView
         android:id="@+id/tvMonitor"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="100dp"
+        android:background="@drawable/bordered_button"
         android:singleLine="true"
-        android:layout_weight="2"
-        android:background="@drawable/bordered_button"/>
+        tools:ignore="MissingConstraints"
+        android:focusedByDefault="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"/>
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvMonitor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
