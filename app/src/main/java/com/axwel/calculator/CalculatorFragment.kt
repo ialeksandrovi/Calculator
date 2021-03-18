@@ -39,29 +39,32 @@ class CalculatorFragment: Fragment() {
             }
 
         }) }!!
-        keyboardAdapter = KeyboardButtonsAdapter(context, object : OperationListener {
-            override fun keyPicked(model: KeyBoardButtonModel) {
-                if (model.keyboardButton is OperationCustomButton) {
-                    when (model.keyboardButton.operation) {
-                        Operation.DIVISION -> presenter.division()
-                        Operation.EQUALITY -> presenter.getTotal()
-                        Operation.SUBTRACTION -> presenter.subtraction()
-                        Operation.MULTIPLICATION -> presenter.multiplication()
-                        Operation.DATA_CLEAR -> presenter.clear()
-                        Operation.MEMO_CLEAR -> presenter.clearMemory()
-                        Operation.MEMO_GET -> presenter.getFromMemory()
-                        Operation.MEMO_ADD -> presenter.saveInMemory()
-                        Operation.ADDITION -> presenter.addition()
-                    }
-                } else {
-                    if (model.keyboardButton.operation == Operation.POINT) {
-                        presenter.addPoint()
+        context?.let {
+            keyboardAdapter = KeyboardButtonsAdapter(it, object : OperationListener {
+                override fun keyPicked(model: KeyBoardButtonModel) {
+                    if (model.keyboardButton is OperationCustomButton) {
+                        when (model.keyboardButton.operation) {
+                            Operation.DIVISION -> presenter.division()
+                            Operation.EQUALITY -> presenter.getTotal()
+                            Operation.SUBTRACTION -> presenter.subtraction()
+                            Operation.MULTIPLICATION -> presenter.multiplication()
+                            Operation.DATA_CLEAR -> presenter.clear()
+                            Operation.MEMO_CLEAR -> presenter.clearMemory()
+                            Operation.MEMO_GET -> presenter.getFromMemory()
+                            Operation.MEMO_ADD -> presenter.saveInMemory()
+                            Operation.ADDITION -> presenter.addition()
+                        }
                     } else {
-                        presenter.addNumber(model.keyboardButton.name.toInt())
+                        if (model.keyboardButton.operation == Operation.POINT) {
+                            presenter.addPoint()
+                        } else {
+                            presenter.addNumber(model.keyboardButton.name.toInt())
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
+
         viewBinding?.let {
             recyclerView = it.rvList
             monitor = it.tvMonitor
